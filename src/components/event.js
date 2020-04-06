@@ -39,4 +39,5 @@ const event = () => {
                   </div>
                 </li>`;
 };
-export default event;
+
+export {event};

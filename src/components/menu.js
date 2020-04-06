@@ -5,4 +5,4 @@ const menu = () => {
   </nav>`;
 };
 
-export default menu;
+export {menu};

@@ -1,20 +1,20 @@
-import price from './price.js';
+import {price} from './price.js';
 export {price};
 
-import tripInfo from './tripInfo.js';
+import {tripInfo} from './trip-info.js';
 export {tripInfo};
 
-import menu from './menu.js';
+import {menu} from './menu.js';
 export {menu};
 
-import filter from './filter.js';
+import {filter} from './filter.js';
 export {filter};
 
-import sort from './sort.js';
+import {sort} from './sort.js';
 export {sort};
 
-import eventForm from './eventForm.js';
+import {eventForm} from './event-form.js';
 export {eventForm};
 
-import event from './event.js';
+import {event} from './event.js';
 export {event};

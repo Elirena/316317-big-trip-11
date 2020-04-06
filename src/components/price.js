@@ -4,4 +4,4 @@ const price = () => {
            </p>`;
 };
 
-export default price;
+export {price};

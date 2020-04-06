@@ -31,4 +31,4 @@ const sort = () => {
           </form>`;
 };
 
-export default sort;
+export {sort};

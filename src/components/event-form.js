@@ -172,4 +172,4 @@ const eventForm = () => {
                   </form>`;
 };
 
-export default eventForm;
+export {eventForm};

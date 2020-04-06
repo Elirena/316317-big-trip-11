@@ -6,4 +6,4 @@ const tripInfo = () => {
            </div>`;
 };
 
-export default tripInfo;
+export {tripInfo};

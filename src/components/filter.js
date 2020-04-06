@@ -18,4 +18,4 @@ const filter = () => {
               <button class="visually-hidden" type="submit">Accept filter</button>
             </form>`;
 };
-export default filter;
+export {filter};
