@@ -1,6 +1,6 @@
 import {getDescription} from './place-description';
 
-const types = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`, `check`, `sightseeing`, `restaurant`];
+const types = [`taxi`, `bus`, `train`, `ship`, `transport`, `drive`, `flight`, `check-in`, `sightseeing`, `restaurant`];
 export const destinations = [`Amsterdam`, `Geneva`, `Chamonix`, `Saint Petersburg`];
 
 export const AllOffers = [
@@ -26,7 +26,6 @@ const getRandomIntegerNumber = (min, max) => {
 const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
-
 
 
 

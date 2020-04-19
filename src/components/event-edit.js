@@ -1,7 +1,11 @@
 import {destinations, AllOffers, activity, transfer} from '../data/events';
+import moment from 'moment';
 
 export const eventEdit = (eventEdition) => {
-  const {destination, type, date, price, isFavorite} = eventEdition;
+  const {destination, type, date, price, isFavorite} = eventEdition[0];
+
+  const dateFrom = moment(date.from).format(`DD/MM/YY h:mm`);
+  const dateTo = moment(date.to).format(`DD/MM/YY h:mm`);
 
   const getEventType = (name) => {
     return `<div class="event__type-item">
@@ -26,7 +30,7 @@ export const eventEdit = (eventEdition) => {
                       <div class="event__type-wrapper">
                         <label class="event__type  event__type-btn" for="event-type-toggle-1">
                           <span class="visually-hidden">Choose event type</span>
-                          <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+                          <img class="event__type-icon" width="17" height="17" src="img/icons/${type}.png" alt="Event type icon">
                         </label>
                         <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
                         <div class="event__type-list">
@@ -49,7 +53,7 @@ export const eventEdit = (eventEdition) => {
                         <label class="event__label  event__type-output" for="event-destination-1">
                           ${type || transfer[0]}
                         </label>
-                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${destination || destinations[0]} list="destination-list-1">
+                        <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${destination || 0} list="destination-list-1">
                         
                         <datalist id="destination-list-1">
                          ${ destinations.map((item) => `<option value=${item} key=${item}>${item}</option>`)}
@@ -61,12 +65,12 @@ export const eventEdit = (eventEdition) => {
                         <label class="visually-hidden" for="event-start-time-1">
                           From
                         </label>
-                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${date || `0`}>
+                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${dateFrom || `0`}>
                         —
                         <label class="visually-hidden" for="event-end-time-1">
                           To
                         </label>
-                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${date || `0`}>
+                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${dateTo || `0`}>
                       </div>
 
                       <div class="event__field-group  event__field-group--price">
