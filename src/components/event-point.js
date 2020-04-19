@@ -1,7 +1,17 @@
-export const createEventForm = (event) => {
-  const {description, destination, type, date, offer, price, duration, isFavorite} = event;
+const getEventOffer = (offer) => {
+  return (
+    `<li class="event__offer">
+          <span class="event__offer-title">${offer.name}</span>
+                    +
+         €&nbsp;<span class="event__offer-price">${offer.price}</span>
+      </li>`);
+};
+
+export const createEventPoint = (event) => {
+  const {description, destination, type, date, offers, price, duration} = event;
 
   console.log(description);
+
   return `
               <li class="trip-events__item">
                   <div class="event">
@@ -25,11 +35,7 @@ export const createEventForm = (event) => {
 
                     <h4 class="visually-hidden">Offers:</h4>
                     <ul class="event__selected-offers">
-                      <li class="event__offer">
-                        <span class="event__offer-title">${offer.name}</span>
-                        +
-                        €&nbsp;<span class="event__offer-price">${offer.price}</span>
-                       </li>
+                     ${offers.map((offer) => getEventOffer(offer))}
                     </ul>
 
                     <button class="event__rollup-btn" type="button">
@@ -39,8 +45,4 @@ export const createEventForm = (event) => {
                 </li>`;
 };
 
-const eventForm = (events) => {
-  const eventData = events.map((item) => createEventForm(item)).join(`\n`);
-  return ` ${eventData} `;
-};
-export {eventForm};
+

@@ -1,4 +1,4 @@
-import {destinations, offers, activity, transfer} from '../data/events';
+import {destinations, AllOffers, activity, transfer} from '../data/events';
 
 export const eventEdit = (eventEdition) => {
   const {destination, type, date, price, isFavorite} = eventEdition;
@@ -12,8 +12,8 @@ export const eventEdit = (eventEdition) => {
 
   const getOfferItem = (item) => {
     return `<div class="event__offer-selector">
-                <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage"  ${item.isChecked ? `checked` : ``}>
-                   <label class="event__offer-label" for="event-offer-luggage-1">
+                <input class="event__offer-checkbox  visually-hidden" id="event-offer-${item.name}" type="checkbox" name="event-offer-${item.name}">
+                   <label class="event__offer-label" for="event-offer-${item.name}">
                   <span class="event__offer-title">${item.name}</span>
                  +
                €&nbsp;<span class="event__offer-price">${item.price}</span>
@@ -61,12 +61,12 @@ export const eventEdit = (eventEdition) => {
                         <label class="visually-hidden" for="event-start-time-1">
                           From
                         </label>
-                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${date || `18/03/19 12:25`}>
+                        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${date || `0`}>
                         —
                         <label class="visually-hidden" for="event-end-time-1">
                           To
                         </label>
-                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${date || `18/03/19 13:35`}>
+                        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${date || `0`}>
                       </div>
 
                       <div class="event__field-group  event__field-group--price">
@@ -80,12 +80,9 @@ export const eventEdit = (eventEdition) => {
                       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                       <button class="event__reset-btn" type="reset">Delete</button>
 
-                      <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked=${isFavorite || false}}
+                      <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" }
                       <label class="event__favorite-btn" for="event-favorite-1">
                         <span class="visually-hidden">Add to favorite</span>
-                        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
-                          <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"></path>
-                        </svg>
                       </label>
                       <button class="event__rollup-btn" type="button">
                         <span class="visually-hidden">Open event</span>
@@ -98,7 +95,7 @@ export const eventEdit = (eventEdition) => {
 
                         <div class="event__available-offers">
                         
-                        ${ offers.map((item) => getOfferItem(item))}
+                        ${ AllOffers.map((item) => getOfferItem(item))}
                         
                         </div>
                       </section>

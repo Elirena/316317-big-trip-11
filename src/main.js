@@ -8,8 +8,8 @@ import {filter} from './components/filter.js';
 import {generateFilters} from './data/filter-values';
 const filters = generateFilters();
 
-import {eventForm} from './components/event-form';
-import {generateEvents, groupByDay, generateAllDays} from './data/events';
+import {generateEvents, groupByDay} from './data/events';
+import {generateAllDays} from './components/events-list';
 const EVENT_COUNT = 15;
 const events = generateEvents(EVENT_COUNT);
 
@@ -21,7 +21,7 @@ function renderElements(container, position, element) {
 }
 
 
-window.onload = function () {
+onload = function () {
   const tripMain = window.document.getElementsByClassName(`trip-main`)[0];
   renderElements(tripMain, `afterbegin`, price());
   renderElements(tripMain, `afterbegin`, tripInfo());
@@ -34,6 +34,5 @@ window.onload = function () {
   renderElements(tripEvents, `beforeend`, sort(sorts));
 
   renderElements(tripEvents, `beforeend`, eventEdit(eventEdition));
- // renderElements(tripEvents, `beforeend`, eventForm(events));
   renderElements(tripEvents, `beforeend`, generateAllDays(groupByDay(events)));
 };
