@@ -27,8 +27,6 @@ const getRandomDate = (start, end) => {
   return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 };
 
-
-
 const generateEvent = () => {
   const picture = `http://picsum.photos/248/152?r=${Math.random()}`;
   const description = getDescription();
@@ -73,19 +71,19 @@ const generateEvents = (count) => {
     .map(generateEvent);
 };
 
-const groupByDay = (allEvents) => {
-  return allEvents.reduce((acc, event) => {
-    const date = event.date.from.getDate();
-    const month = event.date.from.getMonth();
-    const year = event.date.from.getFullYear();
-    const key = `${date}-${month}-${year}`;
+// const groupByDay = (allEvents) => {
+//   return allEvents.reduce((acc, event) => {
+//     const date = event.date.from.getDate();
+//     const month = event.date.from.getMonth();
+//     const year = event.date.from.getFullYear();
+//     const key = `${date}-${month}-${year}`;
+//
+//     acc[key] = acc[key] || [];
+//     acc[key] = [...acc[key], event];
+//
+//     return acc;
+//   }, {});
+// };
 
-    acc[key] = acc[key] || [];
-    acc[key] = [...acc[key], event];
-
-    return acc;
-  }, {});
-};
-
-export {generateEvent, generateEvents, groupByDay};
+export {generateEvent, generateEvents};
 

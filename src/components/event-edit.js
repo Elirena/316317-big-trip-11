@@ -1,8 +1,9 @@
 import {destinations, AllOffers, activity, transfer} from '../data/events';
+import {createElement} from "../utils.js";
 import moment from 'moment';
 
-export const eventEdit = (eventEdition) => {
-  const {destination, type, date, price, isFavorite} = eventEdition[0];
+const createEventEditTemplate = (eventEdition) => {
+  const {destination, type, date, price, isFavorite} = eventEdition;
 
   const dateFrom = moment(date.from).format(`DD/MM/YY h:mm`);
   const dateTo = moment(date.to).format(`DD/MM/YY h:mm`);
@@ -106,3 +107,26 @@ export const eventEdit = (eventEdition) => {
                     </section>
                   </form>`;
 };
+
+export default class EventEdit {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEventEditTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

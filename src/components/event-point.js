@@ -1,3 +1,5 @@
+import {createElement} from "../utils.js";
+
 const getEventOffer = (offer) => {
   return (
     `<li class="event__offer">
@@ -7,13 +9,14 @@ const getEventOffer = (offer) => {
       </li>`);
 };
 
-export const createEventPoint = (event) => {
+const createEventPointTemplate = (event) => {
   const {description, destination, type, date, offers, price, duration} = event;
+  const dateFrom = `${date.from.getHours()} : ${date.from.getMinutes()}`;
+  const dateTo = `${date.to.getHours()}:${date.to.getMinutes()}`;
 
-  console.log(description);
+  // console.log(description);
 
-  return `
-              <li class="trip-events__item">
+  return `<li class="trip-events__item">
                   <div class="event">
                     <div class="event__type">
                       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
@@ -22,9 +25,9 @@ export const createEventPoint = (event) => {
 
                     <div class="event__schedule">
                       <p class="event__time">
-                        <time class="event__start-time" datetime="${date.from}">${date.from.getHours()}:${date.from.getMinutes()}</time>
+                        <time class="event__start-time" datetime="${date.from}">${dateFrom}</time>
                         —
-                        <time class="event__end-time" datetime="${date.to}">${date.to.getHours()}:${date.to.getMinutes()}</time>
+                        <time class="event__end-time" datetime="${dateTo}"></time>
                       </p>
                       <p class="event__duration">${duration} часов</p>
                     </div>
@@ -45,4 +48,32 @@ export const createEventPoint = (event) => {
                 </li>`;
 };
 
+
+export default class EventPoint {
+  constructor(event) {
+    this._event = event;
+  }
+
+  getTemplate() {
+    return createEventPointTemplate(this._event);
+  }
+
+  setOpenButtonClickHandler(handler) {
+    this.getElement().querySelector(`.event__rollup-btn`)
+      .addEventListener(`click`, handler);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+}
 

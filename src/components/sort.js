@@ -1,4 +1,13 @@
-const createSort = (sort, isChecked) => {
+import {createElement} from "../utils.js";
+
+export const createSortTemplate = (sorts) => {
+  const sortData = sorts.map((item, i) => createSortMethod(item, i === 0)).join(`\n`);
+  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+            ${sortData}
+          </form>`;
+};
+
+const createSortMethod = (sort, isChecked) => {
   const sortName = sort.item;
   return (
     `<div class="trip-sort__item  trip-sort__item--${sortName}">
@@ -20,10 +29,25 @@ const createSort = (sort, isChecked) => {
 `);
 };
 
-export const sort = (sorts) => {
-  const sortData = sorts.map((item, i) => createSort(item, i === 0)).join(`\n`);
-  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-            ${sortData}
-          </form>`;
-};
 
+export default class Sort {
+  constructor(sorts) {
+    this._sorts = sorts;
+  }
+
+  getTemplate() {
+    return createSortTemplate(this._sorts);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

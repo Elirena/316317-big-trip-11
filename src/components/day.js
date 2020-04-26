@@ -1,30 +1,29 @@
 import {createElement} from "../utils.js";
 
-const generateAllDays = (days, renderPoint) => {
-  return Object.values(days)
-    .map((events, key) => generateDay(events, renderPoint, key))
-    .join(``);
-};
-
-const generateDay = (events, index) => {
+const generateDayList = (day, index) => {
   return `<li class="trip-days__item  day">
        <div class="day__info">
            <span class="day__counter">${index + 1}</span>
            <time class="day__date" datetime="2019-03-18">MAR 18</time>
        </div>
        <ul class="trip-events__list">
-          ${events}
-      </ul>
-    </li>`;
+       </ul>
+    </li>
+  `;
 };
 
-export default class EventsList {
-  constructor(days) {
-    this._days = days;
+export default class Day {
+  constructor(day, index) {
+    this._day = day;
+    this._index = index;
+  }
+
+  getDay() {
+    return this._day;
   }
 
   getTemplate() {
-    return generateAllDays(this._days);
+    return generateDayList(this._day, this._index);
   }
 
   getElement() {
