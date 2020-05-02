@@ -1,13 +1,13 @@
 import {createElement} from "../utils.js";
 
 export const createSortTemplate = (sorts) => {
-  const sortData = sorts.map((item, i) => createSortMethod(item, i === 0)).join(`\n`);
+  const sortData = sorts.map((item, i) => createSortType(item, i === 0)).join(`\n`);
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             ${sortData}
           </form>`;
 };
 
-const createSortMethod = (sort, isChecked) => {
+const createSortType = (sort, isChecked) => {
   const sortName = sort.item;
   return (
     `<div class="trip-sort__item  trip-sort__item--${sortName}">

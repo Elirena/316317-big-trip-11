@@ -27,7 +27,7 @@ const createEventPointTemplate = (event) => {
                       <p class="event__time">
                         <time class="event__start-time" datetime="${date.from}">${dateFrom}</time>
                         —
-                        <time class="event__end-time" datetime="${dateTo}"></time>
+                        <time class="event__end-time" datetime="${date.to}">${dateTo}</time>
                       </p>
                       <p class="event__duration">${duration} часов</p>
                     </div>

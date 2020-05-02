@@ -7,8 +7,8 @@ import TripInfoComponent from './components/trip-info';
 import FilterComponent from './components/filter';
 import EventEditComponent from './components/event-edit';
 import EventPointComponent from './components/event-point';
-import DayList from './components/day-list';
-import Day from './components/day';
+import DayListComponent from './components/day-list';
+import DayComponent from './components/day';
 
 import {generateSorts} from './data/sort-values';
 const sorts = generateSorts();
@@ -18,9 +18,10 @@ const filters = generateFilters();
 
 import {generateEvents} from './data/events';
 
+const price = 1200;
+
 const EVENT_COUNT = 15;
 const events = generateEvents(EVENT_COUNT);
-const eventEdition = generateEvents(1);
 
 const renderEventPoint = (eventListElement, event) => {
   const onEditButtonClick = () => {
@@ -33,8 +34,7 @@ const renderEventPoint = (eventListElement, event) => {
   };
 
   const eventPointComponent = new EventPointComponent(event);
-  const editButton = eventPointComponent.getElement().querySelector(`.event__rollup-btn`);
-  editButton.addEventListener(`click`, onEditButtonClick);
+  eventPointComponent.setOpenButtonClickHandler(onEditButtonClick);
 
   const eventEditComponent = new EventEditComponent(event);
   const editForm = eventEditComponent.getElement();
@@ -43,12 +43,12 @@ const renderEventPoint = (eventListElement, event) => {
   render(eventListElement, eventPointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
-const renderDay = (dayElement, day) => {
-  const eventListElement = day.getElement().querySelector(`.trip-events__list`);
+const renderDay = (dayElement, dayComponent) => {
+  const eventListElement = dayComponent.getElement().querySelector(`.trip-events__list`);
 
-  render(dayElement, day.getElement(), RenderPosition.BEFOREEND);
+  render(dayElement, dayComponent.getElement(), RenderPosition.BEFOREEND);
 
-  day.getDay().forEach((event) => {
+  dayComponent.getDay().forEach((event) => {
     renderEventPoint(eventListElement, event);
   });
 };
@@ -72,14 +72,14 @@ const renderDayList = (dayListElement, dayList) => {
 
   Object.values(groupByDay)
     .forEach((day, index) => {
-      renderDay(dayElement, new Day(day, index));
+      renderDay(dayElement, new DayComponent(day, index));
     });
 };
 
 
 onload = function () {
   const tripMain = document.getElementsByClassName(`trip-main`)[0];
-  render(tripMain, new TripPriceComponent().getElement(), RenderPosition.AFTERBEGIN);
+  render(tripMain, new TripPriceComponent(price).getElement(), RenderPosition.AFTERBEGIN);
   render(tripMain, new TripInfoComponent().getElement(), RenderPosition.AFTERBEGIN);
 
   const tripControls = document.getElementsByClassName(`trip-controls`)[0];
@@ -89,6 +89,6 @@ onload = function () {
   const tripEvents = document.getElementsByClassName(`trip-events`)[0];
   render(tripEvents, new SortComponent(sorts).getElement(), RenderPosition.BEFOREEND);
 
-  const dayListComponent = new DayList();
+  const dayListComponent = new DayListComponent();
   renderDayList(tripEvents, dayListComponent.getElement());
 };

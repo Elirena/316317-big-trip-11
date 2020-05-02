@@ -71,19 +71,5 @@ const generateEvents = (count) => {
     .map(generateEvent);
 };
 
-// const groupByDay = (allEvents) => {
-//   return allEvents.reduce((acc, event) => {
-//     const date = event.date.from.getDate();
-//     const month = event.date.from.getMonth();
-//     const year = event.date.from.getFullYear();
-//     const key = `${date}-${month}-${year}`;
-//
-//     acc[key] = acc[key] || [];
-//     acc[key] = [...acc[key], event];
-//
-//     return acc;
-//   }, {});
-// };
-
 export {generateEvent, generateEvents};
 
