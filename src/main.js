@@ -9,6 +9,7 @@ import EventEditComponent from './components/event-edit';
 import EventPointComponent from './components/event-point';
 import DayListComponent from './components/day-list';
 import DayComponent from './components/day';
+import NoEventsComponent from "./components/no-events.js";
 
 import {generateSorts} from './data/sort-values';
 const sorts = generateSorts();
@@ -20,25 +21,37 @@ import {generateEvents} from './data/events';
 
 const price = 1200;
 
-const EVENT_COUNT = 15;
+const EVENT_COUNT = 20;
 const events = generateEvents(EVENT_COUNT);
 
 const renderEventPoint = (eventListElement, event) => {
-  const onEditButtonClick = () => {
+  const editFormOpen = () => {
     eventListElement.replaceChild(eventEditComponent.getElement(), eventPointComponent.getElement());
+    document.addEventListener(`keydown`, keyPressHandler);
   };
 
-  const onEditFormSubmit = (evt) => {
-    evt.preventDefault();
+  const editFormClose = (e) => {
+    e.preventDefault();
     eventListElement.replaceChild(eventPointComponent.getElement(), eventEditComponent.getElement());
   };
 
+  const keyPressHandler = (e) => {
+    if (e.keyCode === 27) {
+      editFormClose(e);
+      document.removeEventListener(`keydown`, keyPressHandler);
+    }
+  };
+
   const eventPointComponent = new EventPointComponent(event);
-  eventPointComponent.setOpenButtonClickHandler(onEditButtonClick);
+  eventPointComponent.setOpenButtonClickHandler(editFormOpen);
 
   const eventEditComponent = new EventEditComponent(event);
   const editForm = eventEditComponent.getElement();
-  editForm.addEventListener(`submit`, onEditFormSubmit);
+
+  editForm.addEventListener(`submit`, (e) => {
+    editFormClose(e);
+    document.removeEventListener(`keydown`, keyPressHandler);
+  });
 
   render(eventListElement, eventPointComponent.getElement(), RenderPosition.BEFOREEND);
 };
@@ -52,7 +65,6 @@ const renderDay = (dayElement, dayComponent) => {
     renderEventPoint(eventListElement, event);
   });
 };
-
 
 const renderDayList = (dayListElement, dayList) => {
   const groupByDay = events.reduce((acc, event) => {
@@ -87,8 +99,13 @@ onload = function () {
   render(tripControls, new FilterComponent(filters).getElement(), RenderPosition.BEFOREEND);
 
   const tripEvents = document.getElementsByClassName(`trip-events`)[0];
-  render(tripEvents, new SortComponent(sorts).getElement(), RenderPosition.BEFOREEND);
 
-  const dayListComponent = new DayListComponent();
-  renderDayList(tripEvents, dayListComponent.getElement());
+  if (events.length === 0) {
+    render(tripEvents, new NoEventsComponent().getElement(), RenderPosition.BEFOREEND);
+  } else {
+    const dayListComponent = new DayListComponent();
+
+    render(tripEvents, new SortComponent(sorts).getElement(), RenderPosition.BEFOREEND);
+    renderDayList(tripEvents, dayListComponent.getElement(), RenderPosition.BEFOREEND);
+  }
 };
