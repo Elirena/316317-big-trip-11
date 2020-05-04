@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 import moment from "moment";
 
 const generateDayList = (day, index, dayTime, dayDate) => {
@@ -13,8 +13,10 @@ const generateDayList = (day, index, dayTime, dayDate) => {
   `;
 };
 
-export default class Day {
+export default class Day extends AbstractComponent {
   constructor(day, index) {
+    super();
+
     this._day = day;
     this._index = index;
   }
@@ -33,17 +35,5 @@ export default class Day {
 
   getDayDate() {
     return moment(this._day[0].date.from).format(`MMM DD`);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

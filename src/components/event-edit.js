@@ -1,5 +1,5 @@
 import {destinations, AllOffers, activity, transfer} from '../data/events';
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 import moment from 'moment';
 
 const createEventEditTemplate = (eventEdition) => {
@@ -108,25 +108,25 @@ const createEventEditTemplate = (eventEdition) => {
                   </form>`;
 };
 
-export default class EventEdit {
+export default class EventEdit extends AbstractComponent {
   constructor(event) {
+    super();
+
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
     return createEventEditTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`.event__save-btn`)
+      .addEventListener(`click`, handler);
   }
 
-  removeElement() {
-    this._element = null;
+  setDeleteHandler(handler) {
+    this.getElement().querySelector(`.event__reset-btn`)
+      .addEventListener(`click`, handler);
   }
 }
+

@@ -1,14 +1,22 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
-export const createSortTemplate = (sorts) => {
-  const sortData = sorts.map((item, i) => createSortType(item, i === 0)).join(`\n`);
+export const SortType = {
+  DAY: `day`,
+  EVENT: `event`,
+  TIME: `time`,
+  PRICE: `price`,
+  OFFERS: `offers`
+};
+
+
+export const createSortTemplate = () => {
+  const sortData = Object.values(SortType).map((type, i) => createSortType(type, i === 0)).join(`\n`);
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             ${sortData}
           </form>`;
 };
 
-const createSortType = (sort, isChecked) => {
-  const sortName = sort.item;
+const createSortType = (sortName, isChecked) => {
   return (
     `<div class="trip-sort__item  trip-sort__item--${sortName}">
         <input 
@@ -30,24 +38,38 @@ const createSortType = (sort, isChecked) => {
 };
 
 
-export default class Sort {
-  constructor(sorts) {
-    this._sorts = sorts;
+export default class Sort extends AbstractComponent {
+  constructor() {
+    super();
+
+    this._currenSortType = SortType.DAY;
   }
 
   getTemplate() {
-    return createSortTemplate(this._sorts);
+    return createSortTemplate();
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  getSortType() {
+    return this._currenSortType;
   }
 
-  removeElement() {
-    this._element = null;
+  setSortTypeChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, (e) => {
+      e.preventDefault();
+
+      if (e.target.tagName !== `A`) {
+        return;
+      }
+
+      const sortType = e.target.dataset.sortType;
+
+      if (this._currenSortType === sortType) {
+        return;
+      }
+
+      this._currenSortType = sortType;
+
+      handler(this._currenSortType);
+    });
   }
 }

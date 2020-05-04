@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractComponent from "./abstract-component.js";
 
 const getEventOffer = (offer) => {
   return (
@@ -49,8 +49,10 @@ const createEventPointTemplate = (event) => {
 };
 
 
-export default class EventPoint {
+export default class EventPoint extends AbstractComponent {
   constructor(event) {
+    super();
+
     this._event = event;
   }
 
@@ -62,18 +64,5 @@ export default class EventPoint {
     this.getElement().querySelector(`.event__rollup-btn`)
       .addEventListener(`click`, handler);
   }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
 }
 
