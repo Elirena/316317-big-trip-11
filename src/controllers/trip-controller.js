@@ -1,40 +1,16 @@
-import {render, RenderPosition, replace} from "../utils/render";
-import EventPointComponent from "../components/event-point";
-import EventEditComponent from "../components/event-edit";
+import {render, RenderPosition} from "../utils/render";
+import PointController from '../controllers/point-controller';
 import DayComponent from "../components/day";
 import DayListComponent from '../components/day-list';
 import SortComponent from "../components/sort";
 import NoEventsComponent from "../components/no-events.js";
 
-const renderEventPoint = (eventListElement, event) => {
-  const editFormOpen = () => {
-    replace(eventEditComponent, eventPointComponent);
-    document.addEventListener(`keydown`, keyPressHandler);
-  };
 
-  const editFormClose = (e) => {
-    e.preventDefault();
-    replace(eventPointComponent, eventEditComponent);
-  };
+const renderEventPoint = (eventListElement, event, onDataChange, onViewChange) => {
+  const eventController = new PointController(eventListElement, onDataChange, onViewChange);
+  eventController.render(event);
 
-  const keyPressHandler = (e) => {
-    if (e.keyCode === 27) {
-      editFormClose(e);
-      document.removeEventListener(`keydown`, keyPressHandler);
-    }
-  };
-
-  const eventPointComponent = new EventPointComponent(event);
-  eventPointComponent.setOpenButtonClickHandler(editFormOpen);
-
-  const eventEditComponent = new EventEditComponent(event);
-  eventEditComponent.setSubmitHandler((e) => {
-    editFormClose(e);
-    document.removeEventListener(`keydown`, keyPressHandler);
-  });
-
-
-  render(eventListElement, eventPointComponent, RenderPosition.BEFOREEND);
+  return eventController;
 };
 
 const renderDay = (dayElement, dayComponent) => {
@@ -73,10 +49,16 @@ export default class TripController {
   constructor(container) {
     this._container = container;
 
+    this._events = [];
+    this._showedEventControllers = [];
     this._noEventsComponent = new NoEventsComponent();
     this._sortComponent = new SortComponent();
     this._dayComponent = new DayComponent();
     this._dayListComponent = new DayListComponent();
+
+    this._onDataChange = this._onDataChange.bind(this);
+    this._onViewChange = this._onViewChange.bind(this);
+
   }
 
   render(events) {
@@ -89,8 +71,26 @@ export default class TripController {
       renderDayList(container, this._dayListComponent, events);
     }
 
-
+    // const newEvents = renderEvents(taskListElement, sortedTasks, this._onDataChange, this._onViewChange);
+    // this._showedEventControllers = newEvents;
   }
+
+  _onViewChange() {
+    this._showedEventControllers.forEach((it) => it.setDefaultView());
+  }
+
+  _onDataChange(eventController, oldData, newData) {
+    const index = this._events.findIndex((it) => it === oldData);
+
+    if (index === -1) {
+      return;
+    }
+
+    this._events = [].concat(this._events.slice(0, index), newData, this._events.slice(index + 1));
+
+    eventController.render(this._events[index]);
+  }
+
 }
 
 

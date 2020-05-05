@@ -1,5 +1,5 @@
 import {destinations, AllOffers, activity, transfer} from '../data/events';
-import AbstractComponent from "./abstract-component.js";
+import AbstractSmartComponent from "./abstract-smart-component.js";
 import moment from 'moment';
 
 const createEventEditTemplate = (eventEdition) => {
@@ -85,9 +85,13 @@ const createEventEditTemplate = (eventEdition) => {
                       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
                       <button class="event__reset-btn" type="reset">Delete</button>
 
-                      <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" }
+                      <input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" checked>
                       <label class="event__favorite-btn" for="event-favorite-1">
                         <span class="visually-hidden">Add to favorite</span>
+                        <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
+                          <path d="M14 21l-8.22899 4.3262 1.57159-9.1631L.685209 9.67376 9.8855 8.33688 14 0l4.1145 8.33688 9.2003 1.33688-6.6574 6.48934 1.5716 9.1631L14 21z"/>
+                        </svg>
+                        
                       </label>
                       <button class="event__rollup-btn" type="button">
                         <span class="visually-hidden">Open event</span>
@@ -108,19 +112,61 @@ const createEventEditTemplate = (eventEdition) => {
                   </form>`;
 };
 
-export default class EventEdit extends AbstractComponent {
+export default class EventEdit extends AbstractSmartComponent {
   constructor(event) {
     super();
 
     this._event = event;
+
+    this._submitHandler = null;
+
+    this._subscribeOnEvents();
   }
 
   getTemplate() {
     return createEventEditTemplate(this._event);
   }
 
+  recoveryListeners() {
+    this.setSubmitHandler(this._submitHandler);
+    this._subscribeOnEvents();
+  }
+
+  rerender() {
+    super.rerender();
+  }
+
+  reset() {
+    const event = this._event;
+
+    // this._isDateShowing = !!event.dueDate;
+    // this._isRepeatingTask = Object.values(event.repeatingDays).some(Boolean);
+    // this._activeRepeatingDays = Object.assign({}, task.repeatingDays);
+
+    this.rerender();
+  }
+
+
   setSubmitHandler(handler) {
     this.getElement().querySelector(`.event__save-btn`)
+      .addEventListener(`click`, handler);
+
+    this._submitHandler = handler;
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    // element.querySelector(`.card__date-deadline-toggle`)
+    //   .addEventListener(`click`, () => {
+    //     this._isDateShowing = !this._isDateShowing;
+    //
+    //     this.rerender();
+    //   });
+  }
+
+  setAddToFavoriteHandler(handler) {
+    this.getElement().querySelector(`.event__favorite-checkbox`)
       .addEventListener(`click`, handler);
   }
 
