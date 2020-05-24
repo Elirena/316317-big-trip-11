@@ -1,5 +1,6 @@
 import {destinations, AllOffers, activity, transfer} from '../data/events';
 import AbstractSmartComponent from "./abstract-smart-component.js";
+import {formatTime, formatDate, isRepeating, isOverdueDate} from "../utils/common.js";
 import moment from 'moment';
 
 const createEventEditTemplate = (eventEdition) => {

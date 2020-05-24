@@ -62,6 +62,7 @@ const generateEvent = () => {
     price,
     duration,
     isFavorite,
+    id: String(new Date() + Math.random()),
   };
 };
 

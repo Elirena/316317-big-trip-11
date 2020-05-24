@@ -4,7 +4,7 @@ import DayComponent from "../components/day";
 import DayListComponent from '../components/day-list';
 import SortComponent from "../components/sort";
 import NoEventsComponent from "../components/no-events.js";
-
+import PointController, {Mode as PointControllerMode, EmptyTask} from "./point-controller.js";
 
 const renderEventPoint = (eventListElement, event, onDataChange, onViewChange) => {
   const eventController = new PointController(eventListElement, onDataChange, onViewChange);
@@ -45,7 +45,7 @@ const renderDayList = (dayListElement, dayList, events) => {
 };
 
 
-export default class TripController {
+export default class TripListController {
   constructor(container) {
     this._container = container;
 
@@ -58,7 +58,9 @@ export default class TripController {
 
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onFilterChange = this._onFilterChange.bind(this);
 
+    this._pointsModel.setFilterChangeHandler(this._onFilterChange);
   }
 
   render(events) {
@@ -75,22 +77,61 @@ export default class TripController {
     // this._showedEventControllers = newEvents;
   }
 
+  _removePoints() {
+    this._showedPointControllers.forEach((pointController) => pointController.destroy());
+    this._showedPointControllers = [];
+  }
+
+  _updatePoints(count) {
+    this._removePoints();
+    this._renderPoints(this._pointsModel.getPoints().slice(0, count));
+    this._renderLoadMoreButton();
+  }
   _onViewChange() {
-    this._showedEventControllers.forEach((it) => it.setDefaultView());
+    this._showedPointControllers.forEach((it) => it.setDefaultView());
   }
 
   _onDataChange(eventController, oldData, newData) {
-    const index = this._events.findIndex((it) => it === oldData);
-
-    if (index === -1) {
-      return;
-    }
-
-    this._events = [].concat(this._events.slice(0, index), newData, this._events.slice(index + 1));
-
-    eventController.render(this._events[index]);
+    // if (oldData === EmptyTask) {
+    //   this._creatingTask = null;
+    //   if (newData === null) {
+    //     taskController.destroy();
+    //     this._updateTasks(this._showingTasksCount);
+    //   } else {
+    //     this._tasksModel.addTask(newData);
+    //     taskController.render(newData, TaskControllerMode.DEFAULT);
+    //
+    //     if (this._showingTasksCount % SHOWING_TASKS_COUNT_BY_BUTTON === 0) {
+    //       const destroyedTask = this._showedTaskControllers.pop();
+    //       destroyedTask.destroy();
+    //     }
+    //
+    //     this._showedTaskControllers = [].concat(taskController, this._showedTaskControllers);
+    //     this._showingTasksCount = this._showedTaskControllers.length;
+    //
+    //     this._renderLoadMoreButton();
+    //   }
+    // } else if (newData === null) {
+    //   this._tasksModel.removeTask(oldData.id);
+    //   this._updateTasks(this._showingTasksCount);
+    // } else {
+    //   const isSuccess = this._tasksModel.updateTask(oldData.id, newData);
+    //
+    //   if (isSuccess) {
+    //     taskController.render(newData, TaskControllerMode.DEFAULT);
+    //   }
   }
 
+  _onSortTypeChange(sortType) {
+    const sortedPoints = getSortedPoints(this._pointsModel.getPoints(), sortType, 0);
+
+    this._removePoints();
+    this._renderPoints(sortedPoints);
+  }
+
+  _onFilterChange() {
+    this._updatePoints();
+  }
 }
 
 
